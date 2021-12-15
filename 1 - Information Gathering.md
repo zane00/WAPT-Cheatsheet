@@ -8,13 +8,13 @@ Le informazioni spesso sono recuperabili direttamente (all'interno dell'applicaz
 **WSTG v4.2:** `WSTG-INFO-01`
 
 ```
-site:domain.com
-site:domain.com inurl:robots.txt | inurl:sitemap.xml
-site:domain.com filetype:pdf | filetype:doc | filetype:docx | filetype:csv | filetype:xlsx | filetype:log
-site:domain.com intext:password | intext:admin | intext:username
-site:domain.com intitle:"index of /" intext:"resource/"
-site:domain.com inurl:"*admin | login" | inurl:.php | .asp
-cache:domain.com
+site:<target domain>
+site:<target domain> inurl:robots.txt | inurl:sitemap.xml
+site:<target domain> filetype:pdf | filetype:doc | filetype:docx | filetype:csv | filetype:xlsx | filetype:log
+site:<target domain> intext:password | intext:admin | intext:username
+site:<target domain> intitle:"index of /" intext:"resource/"
+site:<target domain> inurl:"*admin | login" | inurl:.php | .asp
+cache:<target domain>
 ```
 
 #### Riferimenti Utili
@@ -32,29 +32,69 @@ Utilizza `telnet` per le richieste HTTP o `openssl` per le richieste HTTPS.
 
 Connessione HTTP:
 ```
-nc domain.com 80
+nc <target domain> 80
 HEAD/HTTP/1.0
 ```
 
 Connessione HTTPS:
 ```
-openssl s_client -connect domain.com:443
+openssl s_client -connect <target domain>:443
 ```
 
 Fingerprinting:
 ```
-httprint -P0 -h domain.com -s /usr/share/httprint/signatures.txt
-nikto -h domain.com
-nmap -sV -sC -O -p80,443 domain.com
+httprint -P0 -h <target ip> -s /usr/share/httprint/signatures.txt
+nikto -h <target ip>
+nmap -sV -sC -O -p80,443 <target ip>
 ```
 
 ## 1.3 Review Webserver Metafiles for Information Leakage
+**WSTG v4.2:** `WSTG-INFO-03`
+
 ```
-curl -O -Ss https://domain.com/robots.txt && head -n5 robots.txt
-curl -O -Ss https://domain.com/sitemap.xml && head -n8 sitemap.xml
+curl -O -Ss https://<target domain>/robots.txt && cat robots.txt
+curl -O -Ss https://<target domain>/sitemap.xml && cat sitemap.xml
 ```
 Controlla tutti i tag `<meta>` all'interno della pagina.
 
 ## 1.4 Enumerate Applications on Webserver
+**WSTG v4.2:** `WSTG-INFO-04`
+
+```
+nmap -sV -sC -O -p80,443 <target ip>
+```
+
+## 1.5 Review Webpage Content for Information Leakage
+**WSTG v4.2:** `WSTG-INFO-05`
+
+Controlla il codice sorgente dell'applicazione per ricercare commenti che possono essere stati lasciati dai programmatori.
+
+Controlla gli script in JavaScript.
+
+## 1.6 Identify Application Entry Points
+**WSTG v4.2:** `WSTG-INFO-06`
+
+Enumera l'applicazione per identificare le superfici di attacco.
+
+Annota e controlla tutti i parametri passati all'interno delle chiamate GET o POST.
+
+## 1.7 Map Execution Paths Through Application
+**WSTG v4.2:** `WSTG-INFO-07`
+
+## 1.8 Fingerprinting Web Application Framework
+**WSTG v4.2:** `WSTG-INFO-08`
+
+```
+whatweb <target domain>
+```
+
+Wappalyzer browser plugin.
+
+## 1.9 Fingerprinting Web Application
+**WSTG v4.2:** `WSTG-INFO-09`
+
+## 1.10 Map Application Architecture
+**WSTG v4.2:** `WSTG-INFO-10`
+
 
 
