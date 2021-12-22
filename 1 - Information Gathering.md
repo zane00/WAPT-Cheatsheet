@@ -7,6 +7,8 @@ Le informazioni spesso sono recuperabili direttamente (all'interno dell'applicaz
 
 **WSTG v4.2:** `WSTG-INFO-01`
 
+Utilizza il browser web per la ricerca di documenti e/o informazioni sensibili riguardo l'applicazione in esame.
+
 ```
 site:<target domain>
 site:<target domain> inurl:robots.txt | inurl:sitemap.xml
@@ -17,16 +19,16 @@ site:<target domain> inurl:"*admin | login" | inurl:.php | .asp
 cache:<target domain>
 ```
 
-#### Riferimenti Utili
-
-[Google Hacking Database](https://www.exploit-db.com/google-hacking-database)
-
 ## 1.2 Fingerprint Web Server
 
 **WSTG v4.2:** `WSTG-INFO-02`
 
-Intercetta le richieste con un proxy (`Burp Proxy` o `ZAP Proxy`) e verifica il campo `Server: ` nell'header della risposta.
-Se il campo è nascosto fai attenzione all'ordine con cui vengono riportate le informazioni.
+Web Server fingeriprinting consiste nell'individuare il tipo e la versione del web server che contiene l'applicazione. Server che utilizzano versioni vecchie potrebbero essere vulnerabili ad exploit conosciuti.
+
+Intercetta le richieste con un proxy (Burp Proxy o ZAP Proxy) e verifica il campo `Server:` all'interno dell'header della risposta.
+Se il campo è nascosto fai attenzione all'ordine con cui vengono riportate le informazioni dell'header: dall'ordine potrebbe essere comprensibile il servizio utilizzato.
+
+Questa tecnica è conosciuta come **banner grabbing**.
 
 Utilizza `telnet` per le richieste HTTP o `openssl` per le richieste HTTPS.
 
@@ -34,6 +36,11 @@ Connessione HTTP:
 ```
 nc <target domain> 80
 HEAD/HTTP/1.0
+```
+
+```
+nc <target domain> 80
+GET / SANTA CLAUS/1.1
 ```
 
 Connessione HTTPS:
@@ -45,7 +52,7 @@ Fingerprinting:
 ```
 httprint -P0 -h <target ip> -s /usr/share/httprint/signatures.txt
 nikto -h <target ip>
-nmap -sV -sC -O -p80,443 <target ip>
+nmap -sV -O -p80,443 <target ip>
 ```
 
 ## 1.3 Review Webserver Metafiles for Information Leakage
@@ -61,7 +68,7 @@ Controlla tutti i tag `<meta>` all'interno della pagina.
 **WSTG v4.2:** `WSTG-INFO-04`
 
 ```
-nmap -sV -sC -O -p80,443 <target ip>
+nmap -sV -O -p80,443 <target ip>
 ```
 
 ## 1.5 Review Webpage Content for Information Leakage
